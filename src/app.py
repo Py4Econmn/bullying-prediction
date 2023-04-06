@@ -6,7 +6,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 # functon to make prediction
-@st.cache
+@st.cache_resource
 def make_prediction(input_data):
     
     # load the model and make prediction
