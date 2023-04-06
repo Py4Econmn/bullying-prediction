@@ -5,6 +5,40 @@ import joblib
 import warnings 
 warnings.filterwarnings("ignore")
 
+# functon to make prediction
+@st.cache
+def make_prediction(input_data):
+    
+    # load the model and make prediction
+    model = joblib.load('./models/rf_classifier_20230406.pkl')
+    
+    data = [input_data]
+
+    df = pd.DataFrame(data=data, columns=['Sex', 
+                                          'Felt_lonely', 
+                                          'Other_students_kind_and_helpful', 
+                                          'Parents_understand_problems', 
+                                          'Most_of_the_time_or_always_felt_lonely',
+                                          'Missed_classes_or_school_without_permission', 
+                                          'Custom_Age',
+                                          'Physically_attacked',
+                                          'Physical_fighting',
+                                          'Close_friends',
+                                          'Miss_school_no_permission'])
+ 
+    # make prediction
+    result = model.predict(df)
+    if result[0] == 1:
+        result_class = 'Yes'
+    else:
+        result_class = 'No'
+ 
+    # check probabilities
+    probas = model.predict_proba(df)
+    probability = '{:.2f}'.format(float(probas[:, result]))
+ 
+    return result_class, probability
+
 # Set the app title
 st.title('Bullying Prediction App')
 st.write(
@@ -26,3 +60,10 @@ close_friends = form.radio('How many close friends do you have?', ('0', '1', '2'
 days_missed_school = form.radio('How many days have you already missed school with no permission?', ('0 days', '1 or 2 days', '3 to 5 days', '6 to 9 days', '10 or more days'))
 
 submit = form.form_submit_button(label='Make Prediction')
+
+if submit:
+    result, probability = make_prediction([sex, freq_lonely, freq_help, freq_parents_understand, lonely_all_the_time, miss_class, age, physically_att, physically_fight, close_friends, days_missed_school])
+
+    st.header('Results')
+    st.write('Will suffer from school bullying:', result)
+    st.write('Prediction probability:', probability)
