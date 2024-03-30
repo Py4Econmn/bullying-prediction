@@ -43,6 +43,6 @@ jobs:
       run: |
         git config --global user.name "Your Name"
         git config --global user.email "youremail@example.com"
-        git checkout test
+        git checkout -b test
         git merge ${{ github.ref }}
-        git push origin test
+        git push origin test          
