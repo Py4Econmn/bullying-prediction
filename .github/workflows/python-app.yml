@@ -42,7 +42,7 @@ jobs:
     - name: Merge branch
       if: success()   # This step will only run if all previous steps are successful
       run: |
-        git config --global user.name "Py4Econ"
+        git config --global user.name "Py4Econmn"
         git config --global user.email "py4econ@gmail.com"
         git checkout -b test
         git merge ${{ github.ref }}
