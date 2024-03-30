@@ -37,3 +37,12 @@ jobs:
     - name: Test with pytest
       run: |
         pytest
+
+    - name: Merge branch
+      if: success()   # This step will only run if all previous steps are successful
+      run: |
+        git config --global user.name "Your Name"
+        git config --global user.email "youremail@example.com"
+        git checkout test
+        git merge ${{ github.ref }}
+        git push origin test
